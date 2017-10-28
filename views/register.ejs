@@ -1,0 +1,44 @@
+<% include ./partials/header %>
+
+<div class="row">
+    <h1 style="text-align: center">Sign Up</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <form action="/register" method="post">
+            <div class="form-group">
+                <label for="firstName">Username</label>
+                <input class="form-control" type="text" name="username" placeholder="JohnDoe" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input class="form-control" type="text" name="firstName" placeholder="John" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input class="form-control" type="text" name="lastName" placeholder="Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" name="email" placeholder="john@doe.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" name="password" placeholder="********" required>
+            </div>
+            <!-- This part shows a form when the checkbox is clicked -->
+            <div class="form-group">
+                <input type="checkbox" name="admin" onclick="dynInput(this);">
+                    <span id="adminlabel">Register as Admin</span>
+                </input>
+                <div>
+                    <p id="insertinputs"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block">Sign Up!</button>
+            </div>
+        </form>
+        <a href="/campgrounds">Go Back</a>
+    </div>
+</div>
+
+<% include ./partials/footer %>
