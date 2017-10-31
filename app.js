@@ -12,6 +12,7 @@ var express          = require("express"),
     $                = require("jquery"),
     seedDB           = require("./seeds");
 
+
 //Requiring Routes    
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),

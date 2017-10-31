@@ -20,7 +20,7 @@ router.post("/register", function(req, res){
         lastName: req.body.lastName,
         email: req.body.email,
     });
-    var adminCode = "aw498gha2w0gvaw3jga04j";
+    var adminCode = process.env.ADMINCODE;
     if(req.body.adminCode === adminCode){
         newUser.isAdmin = true;
     }
@@ -34,7 +34,7 @@ router.post("/register", function(req, res){
             return res.render("register", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Welcome to YelpCamp, " + user.username + "!");
+            req.flash("success", "Welcome to YelpCamp, " + user.firstName + "!");
             res.redirect("/campgrounds");
         });
     });
