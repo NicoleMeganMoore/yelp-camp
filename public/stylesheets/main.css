@@ -2,12 +2,33 @@
     width: 100%;
 }
 
-.thumbnail .caption-full {
+.thumbnail .caption {
     padding: 9px;
 }
 
 .delete-form {
     display: inline;
+}
+
+.thumbnail .avatar {
+    position: fixed;
+    width: 20%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#avatar :before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    background-image: url("../img/no-image.png");
 }
 
 /* Google Maps */

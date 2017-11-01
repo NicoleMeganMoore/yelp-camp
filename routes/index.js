@@ -1,7 +1,10 @@
 var express      = require("express"),
     router       = express.Router(),
     passport     = require("passport"),
+    middleware   = require("../middleware"),
     User         = require("../models/user");
+
+var adminCode = process.env.ADMINCODE;
 
 router.get("/", function(req,res){
    res.render("landing"); 
@@ -20,7 +23,7 @@ router.post("/register", function(req, res){
         lastName: req.body.lastName,
         email: req.body.email,
     });
-    var adminCode = process.env.ADMINCODE;
+
     if(req.body.adminCode === adminCode){
         newUser.isAdmin = true;
     }
@@ -63,6 +66,8 @@ router.get("/logout", function(req, res){
 });
 
 //User profiles
+
+//SHOW a user profile
 router.get("/users/:id", function(req, res){
     User.findById(req.params.id, function(err, foundUser){
         if(err || !foundUser){
@@ -70,6 +75,37 @@ router.get("/users/:id", function(req, res){
             res.redirect("/campgrounds");
         }
         res.render("users/show", {user: foundUser});
+    });
+});
+
+//EDIT - show edit form for user profile
+router.get("/users/:id/edit", middleware.checkProfileOwnership, function(req, res){
+    User.findById(req.params.id, function(err, foundUser){
+        console.log(foundUser);
+        res.render("users/edit", {user: foundUser});
+    });
+});
+
+
+//UPDATE - update profile page info
+router.put("/users/:id", middleware.checkProfileOwnership, function(req, res){
+    var currentUser = req.body.user;
+    if(req.body.adminCode === adminCode){
+        currentUser.isAdmin = true;
+    }
+    if(req.body.adminCode && req.body.adminCode !== adminCode){
+        req.flash("error", "Incorrect admin code, please try again or leave it blank");
+        return res.redirect("back");
+    }
+    
+    User.findByIdAndUpdate(req.params.id, currentUser, function(err, user){
+        if(err){
+            req.flash("error", err.message);
+            res.redirect("back");
+        } else {
+            req.flash("success","Profile Successfully Updated!");
+            res.redirect("/users/" + user._id);
+        }
     });
 });
 

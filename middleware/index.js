@@ -1,5 +1,6 @@
 var Campground    = require("../models/campgrounds"),
     Comment       = require("../models/comment"),
+    User          = require("../models/user"),
     middlewareObj = {};
 
 middlewareObj.isLoggedIn = function(req, res, next){
@@ -44,6 +45,28 @@ middlewareObj.checkCommentOwnership = function(req, res, next){
                 } else {
                     req.flash("error", "You don't have permission to do that");
                     res.redirect("/campgrounds");
+                }
+            }
+        });
+    } else {
+        req.flash("error", "You need to be logged in to do that");
+        res.redirect("/login");
+    }
+}
+
+middlewareObj.checkProfileOwnership = function(req, res, next){
+    if(req.isAuthenticated()){
+        User.findById(req.params.id, function(err, foundUser){
+            if(err || !foundUser){
+                req.flash("error", "Profile not found");
+                res.redirect("back");
+            } else {
+                // is this the current user's profile?
+                if(foundUser._id.equals(req.user._id) || req.user.isAdmin){
+                    next();
+                } else {
+                    req.flash("error", "You don't have permission to do that");
+                    res.redirect("back");
                 }
             }
         });
